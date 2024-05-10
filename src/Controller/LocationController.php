@@ -108,6 +108,12 @@ class LocationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $locationHours = $form->get('hours')->getData();
+
+            foreach ($locationHours as $locationHour) {
+                $locationHour->setLocation($location);
+            }
+
             $locationRepository->save($location, true);
 
             $this->addFlash('notice', 'The location was created successfully.');
@@ -140,6 +146,12 @@ class LocationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $locationHours = $form->get('hours')->getData();
+
+            foreach ($locationHours as $locationHour) {
+                $locationHour->setLocation($location);
+            }
+
             $locationRepository->save($location, true);
 
             $this->addFlash('notice', 'The location was updated successfully.');
