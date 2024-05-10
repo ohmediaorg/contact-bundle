@@ -27,6 +27,10 @@ class ContactFormExtension extends AbstractExtension
     {
         $form = $this->contactForm->buildForm();
 
+        if (!$form) {
+            return '';
+        }
+
         return $twig->render('@OHMediaContact/contact_form.html.twig', [
             'form' => $form->createView(),
         ]);
