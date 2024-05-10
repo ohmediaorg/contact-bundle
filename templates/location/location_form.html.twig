@@ -69,6 +69,17 @@
             {{ form_label(form.hours) }}
 
             <div id="{{ form.hours.vars.id }}">
+              <small class="d-block">
+                Entering hours:
+
+                <ul>
+                  <li>hours should be entered chronologically</li>
+                  <li>if the location is closed for a period during the day (eg. lunch hour), create two entries for that day (eg. Monday 9am-12pm, Monday 1pm-5pm)</li>
+                  <li>if you omit a day, it will be considered closed</li>
+                  <li>if you are open past midnight for a day, use the "Next Day Close" checkbox - do not create an entry for the next day at 12am</li>
+                </ul>
+              </small>
+
               <table class="table table-sm">
                 <thead>
                   <tr>

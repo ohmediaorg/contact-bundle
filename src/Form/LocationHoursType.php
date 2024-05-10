@@ -19,16 +19,7 @@ class LocationHoursType extends AbstractType
         ]);
 
         $builder->add('day', ChoiceType::class, [
-            'choices' => [
-                'Sunday' => 'Su',
-                'Monday' => 'Mo',
-                'Tuesday' => 'Tu',
-                'Wednesday' => 'We',
-                'Thursday' => 'Th',
-                'Friday' => 'Fr',
-                'Saturday' => 'Sa',
-                'Holiday' => 'Ho',
-            ],
+            'choices' => LocationHours::getDayChoices(),
         ]);
 
         $builder->add('open', TimeType::class, [

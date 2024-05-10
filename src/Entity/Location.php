@@ -219,4 +219,63 @@ class Location
 
         return $this;
     }
+
+    public function getHoursFormatted()
+    {
+        $map = LocationHours::getDayMap();
+
+        $hours = [];
+
+        foreach ($map as $day => $dayFull) {
+            $hours[$dayFull] = [];
+        }
+
+        $map = LocationHours::getDayMap();
+
+        foreach ($this->hours as $locationHours) {
+            $day = $locationHours->getDay();
+            $dayFull = $map[$day];
+
+            if ($locationHours->isClosed()) {
+                continue;
+            }
+
+            $open = $locationHours->getOpen();
+            $close = $locationHours->getClose();
+
+            $openHours = $open->format('g');
+            $openMinutes = $open->format('i');
+            $openAmPm = $open->format('a');
+
+            $closeHours = $close->format('g');
+            $closeMinutes = $close->format('i');
+            $closeAmPm = $close->format('a');
+
+            if ('00' !== $openMinutes) {
+                $openHours .= ':'.$openMinutes;
+            }
+
+            $openHours .= $openAmPm;
+
+            if ('00' !== $closeMinutes) {
+                $closeHours .= ':'.$closeMinutes;
+            }
+
+            $closeHours .= $closeAmPm;
+
+            $hours[$dayFull][] = sprintf(
+                '%s-%s',
+                $openHours,
+                $closeHours
+            );
+        }
+
+        $flattened = [];
+
+        foreach ($hours as $dayFull => $array) {
+            $flattened[$dayFull] = $array ? implode(', ', $array) : 'Closed';
+        }
+
+        return $flattened;
+    }
 }

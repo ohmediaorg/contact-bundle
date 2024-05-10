@@ -9,6 +9,34 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: LocationHoursRepository::class)]
 class LocationHours
 {
+    public const DAY_SUNDAY = 'Su';
+    public const DAY_MONDAY = 'Mo';
+    public const DAY_TUESDAY = 'Tu';
+    public const DAY_WEDNESDAY = 'We';
+    public const DAY_THURSDAY = 'Th';
+    public const DAY_FRIDAY = 'Fr';
+    public const DAY_SATURDAY = 'Sa';
+    public const DAY_HOLIDAY = 'Ho';
+
+    public static function getDayChoices(): array
+    {
+        return [
+            'Sunday' => self::DAY_SUNDAY,
+            'Monday' => self::DAY_MONDAY,
+            'Tuesday' => self::DAY_TUESDAY,
+            'Wednesday' => self::DAY_WEDNESDAY,
+            'Thursday' => self::DAY_THURSDAY,
+            'Friday' => self::DAY_FRIDAY,
+            'Saturday' => self::DAY_SATURDAY,
+            'Holiday' => self::DAY_HOLIDAY,
+        ];
+    }
+
+    public static function getDayMap(): array
+    {
+        return array_flip(self::getDayChoices());
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
