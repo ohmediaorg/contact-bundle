@@ -21,7 +21,7 @@ class LocationExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('location_main', [$this, 'locationMain']),
+            new TwigFunction('location_primary', [$this, 'locationPrimary']),
             new TwigFunction('locations', [$this, 'locations']),
             new TwigFunction('locations_schema', [$this, 'locationsSchema'], [
                 'is_safe' => ['html'],
@@ -32,9 +32,9 @@ class LocationExtension extends AbstractExtension
         ];
     }
 
-    public function locationMain(): ?Location
+    public function locationPrimary(): ?Location
     {
-        return $this->locationRepository->findMain();
+        return $this->locationRepository->findPrimary();
     }
 
     public function locations(): array

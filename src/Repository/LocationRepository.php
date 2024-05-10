@@ -37,10 +37,10 @@ class LocationRepository extends ServiceEntityRepository
         }
     }
 
-    public function findMain(): ?Location
+    public function findPrimary(): ?Location
     {
         return $this->createQueryBuilder('l')
-            ->where('l.main = 1')
+            ->where('l.primary = 1')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();

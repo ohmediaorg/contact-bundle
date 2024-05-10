@@ -162,15 +162,15 @@ class LocationController extends AbstractController
             $locationHour->setLocation($location);
         }
 
-        if ($location->isMain()) {
+        if ($location->isPrimary()) {
             $location->setOrdinal(-1);
 
-            $mainLocation = $locationRepository->findMain();
+            $primary = $locationRepository->findPrimary();
 
-            if ($mainLocation && $mainLocation !== $location) {
-                $mainLocation->setMain(false);
+            if ($primary && $primary !== $location) {
+                $primary->setPrimary(false);
 
-                $locationRepository->save($mainLocation, true);
+                $locationRepository->save($primary, true);
             }
         }
 

@@ -138,7 +138,7 @@ class LocationType extends AbstractType
             'required' => false,
         ]);
 
-        $builder->add('main', ChoiceType::class, [
+        $builder->add('primary', ChoiceType::class, [
             'label' => 'Is this the primary location?',
             'choices' => [
                 'Yes' => true,

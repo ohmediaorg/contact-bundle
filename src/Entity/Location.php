@@ -46,8 +46,8 @@ class Location
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $email = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $main = null;
+    #[ORM\Column(nullable: true, name: 'main')]
+    private ?bool $primary = null;
 
     /**
      * @var Collection<int, LocationHours>
@@ -178,14 +178,14 @@ class Location
         return $this;
     }
 
-    public function isMain(): ?bool
+    public function isPrimary(): ?bool
     {
-        return $this->main;
+        return $this->primary;
     }
 
-    public function setMain(?bool $main): static
+    public function setPrimary(?bool $primary): static
     {
-        $this->main = $main;
+        $this->primary = $primary;
 
         return $this;
     }
