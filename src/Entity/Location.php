@@ -32,7 +32,7 @@ class Location
     #[ORM\Column(length: 100)]
     private ?string $province = null;
 
-    #[ORM\Column(length: 2)]
+    #[ORM\Column(length: 3)]
     private ?string $country = null;
 
     #[ORM\Column(length: 10)]
