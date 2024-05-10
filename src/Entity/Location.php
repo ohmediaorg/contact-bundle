@@ -276,4 +276,56 @@ class Location
 
         return $flattened;
     }
+
+    public function getHoursSchema()
+    {
+        $nextDayMap = [
+            LocationHours::DAY_SUNDAY => LocationHours::DAY_MONDAY,
+            LocationHours::DAY_MONDAY => LocationHours::DAY_TUESDAY,
+            LocationHours::DAY_TUESDAY => LocationHours::DAY_WEDNESDAY,
+            LocationHours::DAY_WEDNESDAY => LocationHours::DAY_THURSDAY,
+            LocationHours::DAY_THURSDAY => LocationHours::DAY_FRIDAY,
+            LocationHours::DAY_FRIDAY => LocationHours::DAY_SATURDAY,
+            LocationHours::DAY_SATURDAY => LocationHours::DAY_MONDAY,
+        ];
+
+        $schema = [];
+
+        foreach ($this->hours as $locationHours) {
+            if ($locationHours->isClosed()) {
+                continue;
+            }
+
+            $day = $locationHours->getDay();
+
+            if (LocationHours::DAY_HOLIDAY === $day) {
+                continue;
+            }
+
+            if ($locationHours->isNextDayClose()) {
+                $nextDay = $nextDayMap[$day];
+
+                $schema[] = sprintf(
+                    '%s %s:00-23:59:59',
+                    $day,
+                    $locationHours->getOpen()->format('H:i'),
+                );
+
+                $schema[] = sprintf(
+                    '%s 00:00:00-%s:00',
+                    $nextDay,
+                    $locationHours->getClose()->format('H:i'),
+                );
+            } else {
+                $schema[] = sprintf(
+                    '%s %s:00-%s:00',
+                    $day,
+                    $locationHours->getOpen()->format('H:i'),
+                    $locationHours->getClose()->format('H:i'),
+                );
+            }
+        }
+
+        return $schema;
+    }
 }
