@@ -1,0 +1,48 @@
+{% set form_id = 'form_' ~ uniq() %}
+
+{{ form(form, {
+  attr: {
+    id: form_id
+  }
+}) }}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('{{ form_id }}');
+
+  let submitting = false;
+
+  function submitForm() {
+    if (submitting) {
+      return;
+    }
+
+    submitting = true;
+
+    const formData = new FormData(form);
+
+    fetch('{{ path('contact_form_post') }}', {
+      type: 'post',
+      body: formData,
+    })
+      .then(r => r.json())
+      .then(() => {
+        // TODO: show a success message
+      })
+      .catch(() => {
+        // TODO: show an error message
+      })
+      .finally(() => {
+        submitting = false;
+      });
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    submitForm();
+
+    return false;
+  });
+});
+</script>
