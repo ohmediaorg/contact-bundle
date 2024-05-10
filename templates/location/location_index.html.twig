@@ -36,7 +36,9 @@
         <thead>
           <tr>
             <th style="width:1rem">&nbsp;</th>
-            <th>Location</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Contact</th>
             <th>Last Updated</th>
             <th></th>
           </tr>
@@ -50,7 +52,28 @@
         {% for location in locations %}
           <tr data-id="{{ location.id }}">
             <td data-handle>{{ bootstrap_icon('arrows-move') }}</td>
-            <td>{{ location }}</td>
+            <td>
+              {{ location }}
+              {% if location.main %}
+              <br>
+              {{ bootstrap_badge_primary('Main') }}
+              {% endif %}
+            </td>
+            <td>
+              <small class="d-block">
+                {{ location.address }}<br>
+                {{ location.city }}, {{ location.province }}<br>
+                {{ location.postalCode }}
+              </small>
+            </td>
+            <td>
+              {% if location.email %}
+              <small class="d-block">{{ location.email }}</small>
+              {% endif %}
+              {% if location.phone %}
+              <small class="d-block">{{ location.phone }}</small>
+              {% endif %}
+            </td>
             <td>{{ location.updatedAt|datetime }}</td>
             <td>
               {% if is_granted(attributes.edit, location) %}

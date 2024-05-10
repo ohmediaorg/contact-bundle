@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -28,6 +29,10 @@ class LocationType extends AbstractType
         $builder->add('provinces', ChoiceType::class, [
             'label' => 'Province',
             'mapped' => false,
+            'data' => $location->getProvince(),
+            'attr' => [
+                'class' => 'nice-select2',
+            ],
             'choices' => [
                 'Saskatchewan' => 'SK',
                 'Alberta' => 'AB',
@@ -48,6 +53,10 @@ class LocationType extends AbstractType
         $builder->add('states', ChoiceType::class, [
             'label' => 'State',
             'mapped' => false,
+            'data' => $location->getProvince(),
+            'attr' => [
+                'class' => 'nice-select2',
+            ],
             'choices' => [
                 'Alabama' => 'AL',
                 'Alaska' => 'AK',
@@ -104,9 +113,20 @@ class LocationType extends AbstractType
 
         $builder->add('country', CountryType::class, [
             'preferred_choices' => ['CA', 'US'],
+            'attr' => [
+                'class' => 'nice-select2',
+            ],
         ]);
 
-        $builder->add('postal_code');
+        $builder->add('postal_code', TextType::class, [
+            'label' => 'Postal Code',
+        ]);
+
+        $builder->add('zip', TextType::class, [
+            'label' => 'ZIP',
+            'mapped' => false,
+            'data' => $location->getPostalCode(),
+        ]);
 
         $builder->add('phone', TelType::class, [
             'required' => false,
@@ -121,6 +141,10 @@ class LocationType extends AbstractType
             'choices' => [
                 'Yes' => true,
                 'No' => false,
+            ],
+            'expanded' => true,
+            'row_attr' => [
+                'class' => 'fieldset-nostyle',
             ],
         ]);
     }
