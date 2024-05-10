@@ -3,12 +3,14 @@
 namespace OHMedia\ContactBundle\Controller;
 
 use OHMedia\ContactBundle\Security\Voter\SettingVoter;
+use OHMedia\ContactBundle\Service\ContactForm;
 use OHMedia\SettingsBundle\Entity\Setting;
 use OHMedia\SettingsBundle\Service\Settings;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -54,5 +56,33 @@ class ContactFormController extends AbstractController
         return $this->render('@OHMediaContact/settings/settings_contact_form.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/contact-form/post', name: 'contact_form_post', methods: ['POST'])]
+    public function contactFormPost(ContactForm $contactForm, Request $request)
+    {
+        $form = $contactForm->buildForm();
+
+        if (!$form) {
+            return new JsonResponse('Form not found.', 500);
+        }
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formData = $form->getData();
+
+            $recipient = $contactForm->getRecipientEmail($formData['recipient']);
+
+            if (!$recipient) {
+                return new JsonResponse('Unknown recipient.', 500);
+            }
+
+            // TODO: send email
+
+            return new JsonResponse('Success.');
+        }
+
+        return new JsonResponse('Invalid form submission.', 500);
     }
 }

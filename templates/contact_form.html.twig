@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const formData = new FormData(form);
 
     fetch('{{ path('contact_form_post') }}', {
-      type: 'post',
+      method: 'post',
       body: formData,
     })
       .then(r => r.json())
