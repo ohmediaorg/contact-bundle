@@ -230,8 +230,6 @@ class Location
             $hours[$dayFull] = [];
         }
 
-        $map = LocationHours::getDayMap();
-
         foreach ($this->hours as $locationHours) {
             $day = $locationHours->getDay();
             $dayFull = $map[$day];
