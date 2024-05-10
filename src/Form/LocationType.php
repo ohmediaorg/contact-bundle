@@ -3,23 +3,11 @@
 namespace OHMedia\ContactBundle\Form;
 
 use OHMedia\ContactBundle\Entity\Location;
-// use Doctrine\ORM\EntityRepository;
-// use Doctrine\ORM\QueryBuilder;
-// use OHMedia\FileBundle\Form\Type\FileEntityType;
-// use OHMedia\MetaBundle\Form\Type\MetaEntityType;
-// use OHMedia\TimezoneBundle\Form\Type\DateTimeType;
-// use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-// use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-// use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-// use Symfony\Component\Form\Extension\Core\Type\EmailType;
-// use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-// use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-// use Symfony\Component\Form\Extension\Core\Type\NumberType;
-// use Symfony\Component\Form\Extension\Core\Type\TelType;
-// use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-// use Symfony\Component\Form\Extension\Core\Type\TextType;
-// use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -29,59 +17,112 @@ class LocationType extends AbstractType
     {
         $location = $options['data'];
 
-        // TIP: these all do the same thing
-        // $builder->add('name');
-        // $builder->add('name', null);
-        // $builder->add('name', TextType::class);
+        $builder->add('name');
 
-        // always use the file-bundle for files
-        // for some reason it is necessary to specify 'data'
-        // when usually 'mapped' => true (default) is enough
-        // $builder->add('file', FileEntityType::class, [
-        //     'data' => $location->getFile(),
-        // ]);
-        // $builder->add('image', FileEntityType::class, [
-        //     'image' => true,
-        //     'data' => $location->getFile(),
-        // ]);
+        $builder->add('address');
 
-        // always use the datetime-bundle to ensure timezones are good
-        // $builder->add('start_datetime', DateTimeType::class);
-        // $builder->add('end_datetime', DateTimeType::class);
+        $builder->add('city');
 
-        // if you have a checkbox for a toggle, make sure it is not required
-        // $builder->add('is_featured', CheckboxType::class, [
-        //     'required' => false,
-        // ]);
+        $builder->add('province');
 
-        // <select>
-        // $builder->add('selection', ChoiceType::class);
+        $builder->add('provinces', ChoiceType::class, [
+            'label' => 'Province',
+            'mapped' => false,
+            'choices' => [
+                'Saskatchewan' => 'SK',
+                'Alberta' => 'AB',
+                'British Columbia' => 'BC',
+                'Manitoba' => 'MB',
+                'New Brunswick' => 'NB',
+                'Newfoundland and Labrador' => 'NL',
+                'Northwest Territories' => 'NT',
+                'Nova Scotia' => 'NS',
+                'Nunavut' => 'NU',
+                'Ontario' => 'ON',
+                'Prince Edward Island' => 'PE',
+                'Quebec' => 'QC',
+                'Yukon' => 'YT',
+            ],
+        ]);
 
-        // <select multiple>
-        // $builder->add('selection', ChoiceType::class, [
-        //     'multiple' => true,
-        // ]);
+        $builder->add('states', ChoiceType::class, [
+            'label' => 'State',
+            'mapped' => false,
+            'choices' => [
+                'Alabama' => 'AL',
+                'Alaska' => 'AK',
+                'Arizona' => 'AZ',
+                'Arkansas' => 'AR',
+                'California' => 'CA',
+                'Colorado' => 'CO',
+                'Connecticut' => 'CT',
+                'Delaware' => 'DE',
+                'Florida' => 'FL',
+                'Georgia' => 'GA',
+                'Hawaii' => 'HI',
+                'Idaho' => 'ID',
+                'Illinois' => 'IL',
+                'Indiana' => 'IN',
+                'Iowa' => 'IA',
+                'Kansas' => 'KS',
+                'Kentucky' => 'KY',
+                'Louisiana' => 'LA',
+                'Maine' => 'ME',
+                'Maryland' => 'MD',
+                'Massachusetts' => 'MA',
+                'Michigan' => 'MI',
+                'Minnesota' => 'MN',
+                'Mississippi' => 'MS',
+                'Missouri' => 'MO',
+                'Montana' => 'MT',
+                'Nebraska' => 'NE',
+                'Nevada' => 'NV',
+                'New Hampshire' => 'NH',
+                'New Jersey' => 'NJ',
+                'New Mexico' => 'NM',
+                'New York' => 'NY',
+                'North Carolina' => 'NC',
+                'North Dakota' => 'ND',
+                'Ohio' => 'OH',
+                'Oklahoma' => 'OK',
+                'Oregon' => 'OR',
+                'Pennsylvania' => 'PA',
+                'Rhode Island' => 'RI',
+                'South Carolina' => 'SC',
+                'South Dakota' => 'SD',
+                'Tennessee' => 'TN',
+                'Texas' => 'TX',
+                'Utah' => 'UT',
+                'Vermont' => 'VT',
+                'Virginia' => 'VA',
+                'Washington' => 'WA',
+                'West Virginia' => 'WV',
+                'Wisconsin' => 'WI',
+                'Wyoming' => 'WY',
+            ],
+        ]);
 
-        // array of <input type="radio">
-        // $builder->add('selection', ChoiceType::class, [
-        //     'expanded' => true,
-        // ]);
+        $builder->add('country', CountryType::class, [
+            'preferred_choices' => ['CA', 'US'],
+        ]);
 
-        // array of <input type="checkbox">
-        // $builder->add('selection', ChoiceType::class, [
-        //     'expanded' => true,
-        //     'multiple' => true,
-        // ]);
+        $builder->add('postal_code');
 
-        // for a OneToOne or ManyToOne relationship selection
-        // $builder->add('owner', EntityType::class, [
-        //     'class' => User::class,
-        //     'query_builder' => function (EntityRepository $er): QueryBuilder {
-        //         return $er->createQueryBuilder('u')
-        //             ->orderBy('u.email', 'ASC');
-        //     },
-        //     'choice_label' => 'email',
-        // ]);
+        $builder->add('phone', TelType::class, [
+            'required' => false,
+        ]);
+
+        $builder->add('email', EmailType::class, [
+            'required' => false,
+        ]);
+
+        $builder->add('main', ChoiceType::class, [
+            'label' => 'Is this the primary location?',
+            'choices' => [
+                'Yes' => true,
+                'No' => false,
+            ],
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
