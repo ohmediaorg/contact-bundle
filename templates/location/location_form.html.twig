@@ -175,6 +175,22 @@ const hoursContainer = document.getElementById('hours_container');
 let hoursIndex = {{ form.hours.children|length - 1 }};
 
 async function initRow(row) {
+  const closed = document.getElementById(row.id + '_closed');
+
+  const open = document.getElementById(row.id + '_open');
+  const close = document.getElementById(row.id + '_close');
+  const nextDayClose = document.getElementById(row.id + '_next_day_close');
+
+  function onClosedChange() {
+    open.style.display = closed.checked ? 'none' : '';
+    close.style.display = closed.checked ? 'none' : '';
+    nextDayClose.parentNode.style.display = closed.checked ? 'none' : '';
+  }
+
+  closed.addEventListener('change', onClosedChange);
+
+  onClosedChange();
+
   const deleteButton = document.getElementById(row.id + '_delete');
 
   deleteButton.addEventListener('click', async function(e) {
