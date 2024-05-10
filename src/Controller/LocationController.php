@@ -11,6 +11,7 @@ use OHMedia\ContactBundle\Security\Voter\LocationVoter;
 use OHMedia\SecurityBundle\Form\DeleteType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,10 +33,7 @@ class LocationController extends AbstractController
             'You cannot access the list of locations.'
         );
 
-        $locations = $locationRepository->createQueryBuilder('l')
-            ->orderBy('l.ordinal', 'asc')
-            ->getQuery()
-            ->getResult();
+        $locations = $locationRepository->findAllOrdered();
 
         return $this->render('@OHMediaContact/location/location_index.html.twig', [
             'locations' => $locations,
@@ -108,13 +106,7 @@ class LocationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $locationHours = $form->get('hours')->getData();
-
-            foreach ($locationHours as $locationHour) {
-                $locationHour->setLocation($location);
-            }
-
-            $locationRepository->save($location, true);
+            $this->save($location, $locationRepository, $form);
 
             $this->addFlash('notice', 'The location was created successfully.');
 
@@ -146,13 +138,7 @@ class LocationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $locationHours = $form->get('hours')->getData();
-
-            foreach ($locationHours as $locationHour) {
-                $locationHour->setLocation($location);
-            }
-
-            $locationRepository->save($location, true);
+            $this->save($location, $locationRepository, $form);
 
             $this->addFlash('notice', 'The location was updated successfully.');
 
@@ -163,6 +149,30 @@ class LocationController extends AbstractController
             'form' => $form->createView(),
             'location' => $location,
         ]);
+    }
+
+    private function save(
+        Location $location,
+        LocationRepository $locationRepository,
+        FormInterface $form
+    ): void {
+        $locationHours = $form->get('hours')->getData();
+
+        foreach ($locationHours as $locationHour) {
+            $locationHour->setLocation($location);
+        }
+
+        if ($location->isMain()) {
+            $mainLocation = $locationRepository->findMain();
+
+            if ($mainLocation && $mainLocation !== $location) {
+                $mainLocation->setMain(false);
+
+                $locationRepository->save($mainLocation, true);
+            }
+        }
+
+        $locationRepository->save($location, true);
     }
 
     #[Route('/location/{id}/delete', name: 'location_delete', methods: ['GET', 'POST'])]
