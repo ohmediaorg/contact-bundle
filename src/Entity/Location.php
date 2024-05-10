@@ -2,6 +2,8 @@
 
 namespace OHMedia\ContactBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OHMedia\ContactBundle\Repository\LocationRepository;
@@ -46,6 +48,17 @@ class Location
 
     #[ORM\Column(nullable: true)]
     private ?bool $main = null;
+
+    /**
+     * @var Collection<int, LocationHours>
+     */
+    #[ORM\OneToMany(targetEntity: LocationHours::class, mappedBy: 'location', orphanRemoval: true)]
+    private Collection $hours;
+
+    public function __construct()
+    {
+        $this->hours = new ArrayCollection();
+    }
 
     public function __toString(): string
     {
@@ -173,6 +186,36 @@ class Location
     public function setMain(?bool $main): static
     {
         $this->main = $main;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LocationHours>
+     */
+    public function getHours(): Collection
+    {
+        return $this->hours;
+    }
+
+    public function addHour(LocationHours $hour): static
+    {
+        if (!$this->hours->contains($hour)) {
+            $this->hours->add($hour);
+            $hour->setLocation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHour(LocationHours $hour): static
+    {
+        if ($this->hours->removeElement($hour)) {
+            // set the owning side to null (unless already changed)
+            if ($hour->getLocation() === $this) {
+                $hour->setLocation(null);
+            }
+        }
 
         return $this;
     }

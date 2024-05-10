@@ -2,6 +2,40 @@
 
 {% block meta_title %}{{ form_title }}{% endblock %}
 
+{% macro form_row_hours(form) %}
+<tr>
+  <td>
+    {{ form_widget(form.day, {
+      attr: {
+        class: 'form-select-sm',
+      },
+    }) }}
+    {{ form_widget(form.closed) }}
+  </td>
+  <td>
+    {{ form_widget(form.open, {
+      attr: {
+        class: 'form-control-sm',
+      },
+    }) }}
+  </td>
+  <td>
+    {{ form_widget(form.close, {
+      attr: {
+        class: 'form-control-sm',
+      },
+    }) }}
+    {{ form_widget(form.next_day_close) }}
+  </td>
+  <td>
+    <a class="btn btn-danger btn-sm float-end" title="Delete">
+      {{ bootstrap_icon('trash-fill') }}
+      <span class="visually-hidden">Delete</span>
+    </a>
+  </td>
+</tr>
+{% endmacro %}
+
 {% block main %}
 <div class="row">
   <div class="col-xl-8">
@@ -28,6 +62,31 @@
             <div class="col-6">{{ form_row(form.email) }}</div>
           </div>
           {{ form_row(form.main) }}
+
+          {% do form.hours.setRendered %}
+
+          <fieldset>
+            {{ form_label(form.hours) }}
+
+            <div id="{{ form.hours.vars.id }}">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>Day</th>
+                    <th>Open</th>
+                    <th>Close</th>
+                    <th>&nbsp;</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for child in form.hours.children %}
+                {{ _self.form_row_hours(child) }}
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </fieldset>
+          {{ dump(form.hours) }}
         {{ form_end(form) }}
       </div>
     </div>
@@ -101,6 +160,8 @@ function toggleFields() {
 country.addEventListener('change', toggleFields);
 
 toggleFields();
+
+const hoursPrototype = {{ _self.form_row_hours(form.hours.vars.prototype)|json_encode|raw }};
 });
 </script>
 {% endblock %}

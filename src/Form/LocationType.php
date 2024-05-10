@@ -5,6 +5,7 @@ namespace OHMedia\ContactBundle\Form;
 use OHMedia\ContactBundle\Entity\Location;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
@@ -147,6 +148,12 @@ class LocationType extends AbstractType
             'row_attr' => [
                 'class' => 'fieldset-nostyle',
             ],
+        ]);
+
+        $builder->add('hours', CollectionType::class, [
+            'entry_type' => LocationHoursType::class,
+            'allow_add' => true,
+            'allow_delete' => true,
         ]);
     }
 
