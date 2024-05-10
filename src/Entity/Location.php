@@ -52,7 +52,7 @@ class Location
     /**
      * @var Collection<int, LocationHours>
      */
-    #[ORM\OneToMany(targetEntity: LocationHours::class, mappedBy: 'location', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: LocationHours::class, mappedBy: 'location', orphanRemoval: true, cascade: ['persist', 'remove'])]
     private Collection $hours;
 
     public function __construct()
