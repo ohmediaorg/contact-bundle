@@ -36,4 +36,20 @@ class LocationRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public function findMain(): ?Location
+    {
+        return $this->createQueryBuilder('l')
+            ->where('l.main = 1')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findAllOrdered(): array
+    {
+        return $this->findBy([], [
+            'ordinal' => 'asc',
+        ]);
+    }
 }

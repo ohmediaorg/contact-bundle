@@ -34,19 +34,12 @@ class LocationExtension extends AbstractExtension
 
     public function locationMain(): ?Location
     {
-        return $this->locationRepository
-            ->createQueryBuilder('l')
-            ->where('l.main = 1')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
+        return $this->locationRepository->findMain();
     }
 
     public function locations(): array
     {
-        return $this->locationRepository->findBy([], [
-            'ordinal' => 'asc',
-        ]);
+        return $this->locationRepository->findAllOrdered();
     }
 
     public function locationsSchema(): string
