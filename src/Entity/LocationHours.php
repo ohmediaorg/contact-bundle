@@ -9,26 +9,27 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: LocationHoursRepository::class)]
 class LocationHours
 {
-    public const DAY_SUNDAY = 'Su';
-    public const DAY_MONDAY = 'Mo';
-    public const DAY_TUESDAY = 'Tu';
-    public const DAY_WEDNESDAY = 'We';
-    public const DAY_THURSDAY = 'Th';
-    public const DAY_FRIDAY = 'Fr';
-    public const DAY_SATURDAY = 'Sa';
-    public const DAY_HOLIDAY = 'Ho';
+    // ISO 8601 numeric representation of the day of the week
+    public const DAY_MONDAY = 1;
+    public const DAY_TUESDAY = 2;
+    public const DAY_WEDNESDAY = 3;
+    public const DAY_THURSDAY = 4;
+    public const DAY_FRIDAY = 5;
+    public const DAY_SATURDAY = 6;
+    public const DAY_SUNDAY = 7;
+    public const DAY_HOLIDAY = 99;
 
     public static function getDayChoices(): array
     {
         return [
-            'Sunday' => self::DAY_SUNDAY,
             'Monday' => self::DAY_MONDAY,
             'Tuesday' => self::DAY_TUESDAY,
             'Wednesday' => self::DAY_WEDNESDAY,
             'Thursday' => self::DAY_THURSDAY,
             'Friday' => self::DAY_FRIDAY,
             'Saturday' => self::DAY_SATURDAY,
-            'Holiday' => self::DAY_HOLIDAY,
+            'Sunday' => self::DAY_SUNDAY,
+            'Holidays' => self::DAY_HOLIDAY,
         ];
     }
 
@@ -45,8 +46,8 @@ class LocationHours
     #[ORM\Column(nullable: true)]
     private ?bool $closed = null;
 
-    #[ORM\Column(length: 2, nullable: true)]
-    private ?string $day = null;
+    #[ORM\Column(type: Types::SMALLINT)]
+    private ?int $day = null;
 
     #[ORM\Column(type: Types::TIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $open = null;
@@ -78,12 +79,12 @@ class LocationHours
         return $this;
     }
 
-    public function getDay(): ?string
+    public function getDay(): ?int
     {
         return $this->day;
     }
 
-    public function setDay(string $day): static
+    public function setDay(int $day): static
     {
         $this->day = $day;
 
