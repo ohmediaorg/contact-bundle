@@ -11,11 +11,15 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Validator\Constraints;
 
 class ContactForm
 {
+    public const DEFAULT_SUCCESS_MESSAGE = 'Thanks for your submission. We will get back to you as soon as we can.';
+
     public function __construct(
         private FormFactoryInterface $formFactory,
         private LocationRepository $locationRepository,
@@ -26,12 +30,6 @@ class ContactForm
     public function buildForm(): ?FormInterface
     {
         $formBuilder = $this->formFactory->createBuilder(FormType::class);
-
-        $formBuilder->add('name');
-
-        $formBuilder->add('email', EmailType::class);
-
-        $formBuilder->add('phone', TelType::class);
 
         $recipients = [];
 
@@ -48,7 +46,7 @@ class ContactForm
                 continue;
             }
 
-            $recipients[(string) $location] = 'location:'.$location->getId();
+            $recipients[(string) $location.' Location'] = 'location:'.$location->getId();
         }
 
         if (!$recipients) {
@@ -59,7 +57,47 @@ class ContactForm
             'choices' => $recipients,
         ]);
 
-        $formBuilder->add('message', TextareaType::class);
+        $formBuilder->add('name', TextType::class, [
+            'constraints' => [
+                new Constraints\NotBlank(null, 'Please fill out your name.'),
+            ],
+        ]);
+
+        $formBuilder->add('email', EmailType::class, [
+            'constraints' => [
+                new Constraints\NotBlank(null, 'Please fill out your email.'),
+                new Constraints\Email(
+                    null,
+                    'Please enter a valid email address.'
+                ),
+            ],
+        ]);
+
+        $formBuilder->add('phone', TelType::class, [
+            'constraints' => [
+                new Constraints\NotBlank(null, 'Please fill out your phone number.'),
+            ],
+        ]);
+
+        $formBuilder->add('message', TextareaType::class, [
+            'attr' => [
+                'maxlength' => 1000,
+            ],
+            'constraints' => [
+                new Constraints\NotBlank(null, 'Please enter a message.'),
+                new Constraints\Length(
+                    null,
+                    null,
+                    1000,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    'Please enter a message of 1000 characters or less.'
+                ),
+            ],
+        ]);
 
         $formBuilder->add('captcha', CaptchaType::class);
 
@@ -81,5 +119,12 @@ class ContactForm
 
             return $location ? $location->getEmail() : null;
         }
+    }
+
+    public function getSuccessMessage(): string
+    {
+        $successMessage = $this->settings->get('contact_form_message');
+
+        return $successMessage ?: self::DEFAULT_SUCCESS_MESSAGE;
     }
 }

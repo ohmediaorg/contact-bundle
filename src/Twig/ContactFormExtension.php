@@ -9,7 +9,8 @@ use Twig\TwigFunction;
 
 class ContactFormExtension extends AbstractExtension
 {
-    public function __construct(private ContactForm $contactForm)
+    public function __construct(
+        private ContactForm $contactForm)
     {
     }
 
@@ -33,6 +34,7 @@ class ContactFormExtension extends AbstractExtension
 
         return $twig->render('@OHMediaContact/contact_form.html.twig', [
             'form' => $form->createView(),
+            'success_message' => $this->contactForm->getSuccessMessage(),
         ]);
     }
 }
