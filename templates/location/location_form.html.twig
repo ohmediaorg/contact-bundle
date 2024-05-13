@@ -148,14 +148,14 @@ function hideInput(input) {
 }
 
 function toggleFields() {
-  if ('CA' === country.value) {
+  if ('CAN' === country.value) {
     showInput(provinces);
     showInput(postalCode);
     hideInput(province);
     hideInput(states);
     hideInput(zip);
     province.value = provinces.value;
-  } else if ('US' === country.value) {
+  } else if ('USA' === country.value) {
     showInput(states);
     showInput(zip);
     hideInput(province);
