@@ -36,6 +36,7 @@ class ContactFormController extends AbstractController
         ]);
 
         $formBuilder->add('message', TextareaType::class, [
+            'required' => false,
             'data' => $settings->get('contact_form_message'),
             'help' => 'The default message is "'.ContactForm::DEFAULT_SUCCESS_MESSAGE.'"',
         ]);
