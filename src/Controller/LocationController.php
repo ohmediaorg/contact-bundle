@@ -160,6 +160,11 @@ class LocationController extends AbstractController
 
         foreach ($locationHours as $locationHour) {
             $locationHour->setLocation($location);
+
+            if ($locationHour->isClosed()) {
+                $locationHour->setOpen(null);
+                $locationHour->setClose(null);
+            }
         }
 
         if ($location->isPrimary()) {
