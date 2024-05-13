@@ -4,6 +4,8 @@
   {{ success_message|nl2br }}
 </div>
 
+{% do form.captcha.setRendered %}
+
 {{ form_start(form, {
   attr: {
     id: form_id
@@ -14,18 +16,31 @@
   {{ form_row(form.email) }}
   {{ form_row(form.phone) }}
   {{ form_row(form.message) }}
-  {{ form_row(form.captcha) }}
+
+  <div id="{{ form_id }}_captcha_container" class="mb-3"></div>
+  <input type="hidden" id="{{ form_id }}_captcha_input" name="{{ form.captcha.vars.full_name }}" />
 
   <div id="{{ form_id }}_error" class="alert alert-danger" style="display:none"></div>
 
 {{ form_end(form) }}
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
   const form = document.getElementById('{{ form_id }}');
 
   const success = document.getElementById('{{ form_id }}_success');
   const error = document.getElementById('{{ form_id }}_error');
+
+  const captchaContainer = document.getElementById('{{ form_id }}_captcha_container');
+  const captchaInput = document.getElementById('{{ form_id }}_captcha_input');
+
+  const parameters = {
+    sitekey: {{ captcha_sitekey|json_encode|raw }},
+    theme: {{ form.captcha.vars.theme|json_encode|raw }},
+    size: {{ form.captcha.vars.size|json_encode|raw }},
+  };
+
+  const captcha = await OHMEDIA_ANTISPAM_CAPTCHA_PROMISE(captchaContainer, parameters);
 
   const submitButton = form.querySelector('[type=submit]');
 
@@ -52,6 +67,8 @@ document.addEventListener('DOMContentLoaded', function() {
       .then((r) => {
         if (r.success) {
           success.style.display = '';
+          form.reset();
+          form.style.display = 'none';
         } else {
           error.innerHTML = r.errors.join('<br>');
           error.style.display = '';
@@ -65,11 +82,14 @@ document.addEventListener('DOMContentLoaded', function() {
         submitting = false;
         submitButton.textContent = 'Submit';
         submitButton.disabled = false;
+        captcha.reset();
       });
   }
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    captchaInput.value = captcha.getResponse();
 
     submitForm();
 

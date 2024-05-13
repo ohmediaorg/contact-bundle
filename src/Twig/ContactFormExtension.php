@@ -3,6 +3,7 @@
 namespace OHMedia\ContactBundle\Twig;
 
 use OHMedia\ContactBundle\Service\ContactForm;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -10,8 +11,10 @@ use Twig\TwigFunction;
 class ContactFormExtension extends AbstractExtension
 {
     public function __construct(
-        private ContactForm $contactForm)
-    {
+        private ContactForm $contactForm,
+        #[Autowire('%oh_media_antispam.captcha.sitekey%')]
+        private string $captchaSitekey
+    ) {
     }
 
     public function getFunctions(): array
@@ -35,6 +38,7 @@ class ContactFormExtension extends AbstractExtension
         return $twig->render('@OHMediaContact/contact_form.html.twig', [
             'form' => $form->createView(),
             'success_message' => $this->contactForm->getSuccessMessage(),
+            'captcha_sitekey' => $this->captchaSitekey,
         ]);
     }
 }
