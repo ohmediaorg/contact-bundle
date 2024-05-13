@@ -82,6 +82,7 @@ class ContactForm
         $formBuilder->add('message', TextareaType::class, [
             'attr' => [
                 'maxlength' => 1000,
+                'rows' => 5,
             ],
             'constraints' => [
                 new Constraints\NotBlank(null, 'Please enter a message.'),

@@ -4,13 +4,21 @@
   {{ success_message|nl2br }}
 </div>
 
-<div id="{{ form_id }}_error" class="alert alert-danger" style="display:none"></div>
-
-{{ form(form, {
+{{ form_start(form, {
   attr: {
     id: form_id
   }
 }) }}
+  {{ form_row(form.recipient) }}
+  {{ form_row(form.name) }}
+  {{ form_row(form.email) }}
+  {{ form_row(form.phone) }}
+  {{ form_row(form.message) }}
+  {{ form_row(form.captcha) }}
+
+  <div id="{{ form_id }}_error" class="alert alert-danger" style="display:none"></div>
+
+{{ form_end(form) }}
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -18,6 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const success = document.getElementById('{{ form_id }}_success');
   const error = document.getElementById('{{ form_id }}_error');
+
+  const submitButton = form.querySelector('[type=submit]');
 
   let submitting = false;
 
@@ -29,6 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
     submitting = true;
     success.style.display = 'none';
     error.style.display = 'none';
+    submitButton.textContent = 'Submitting...';
+    submitButton.disabled = true;
 
     const formData = new FormData(form);
 
@@ -41,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (r.success) {
           success.style.display = '';
         } else {
-          error.innerHTML = r.errors.split('<br>');
+          error.innerHTML = r.errors.join('<br>');
           error.style.display = '';
         }
       })
@@ -51,6 +63,8 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .finally(() => {
         submitting = false;
+        submitButton.textContent = 'Submit';
+        submitButton.disabled = false;
       });
   }
 
