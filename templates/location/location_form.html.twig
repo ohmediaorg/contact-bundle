@@ -193,7 +193,9 @@ async function initRow(row) {
 
   function onClosedChange() {
     open.style.display = closed.checked ? 'none' : '';
+    open.required = !closed.checked;
     close.style.display = closed.checked ? 'none' : '';
+    close.required = !closed.checked;
     nextDayClose.parentNode.style.display = closed.checked ? 'none' : '';
   }
 
