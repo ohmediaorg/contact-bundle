@@ -163,8 +163,6 @@ class LocationController extends AbstractController
         }
 
         if ($location->isPrimary()) {
-            $location->setOrdinal(-1);
-
             $primary = $locationRepository->findPrimary();
 
             if ($primary && $primary !== $location) {
