@@ -11,7 +11,8 @@ class ContactFormNavLinkProvider extends AbstractSettingsNavLinkProvider
 {
     public function getNavLink(): NavLink
     {
-        return new NavLink('Contact Form', 'settings_contact_form');
+        return (new NavLink('Contact Form', 'settings_contact_form'))
+            ->setIcon('mailbox2-flag');
     }
 
     public function getVoterAttribute(): string
