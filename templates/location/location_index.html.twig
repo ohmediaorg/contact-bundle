@@ -15,7 +15,7 @@
 {% block actions %}
 {% if can_create_location %}
 <a href="{{ create_location_href }}" class="btn btn-sm btn-primary">
-  <i class="bi bi-plus"></i> Add Location</a>
+  {{ bootstrap_icon('plus') }} Add Location</a>
 {% endif %}
 {% endblock %}
 
