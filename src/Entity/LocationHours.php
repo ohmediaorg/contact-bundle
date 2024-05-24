@@ -2,9 +2,9 @@
 
 namespace OHMedia\ContactBundle\Entity;
 
-use App\Repository\LocationHoursRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use OHMedia\ContactBundle\Repository\LocationHoursRepository;
 
 #[ORM\Entity(repositoryClass: LocationHoursRepository::class)]
 class LocationHours
