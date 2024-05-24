@@ -11,7 +11,6 @@ use OHMedia\ContactBundle\Security\Voter\LocationVoter;
 use OHMedia\SecurityBundle\Form\DeleteType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,7 +105,7 @@ class LocationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->save($location, $locationRepository, $form);
+            $this->save($location, $locationRepository);
 
             $this->addFlash('notice', 'The location was created successfully.');
 
@@ -138,7 +137,7 @@ class LocationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->save($location, $locationRepository, $form);
+            $this->save($location, $locationRepository);
 
             $this->addFlash('notice', 'The location was updated successfully.');
 
@@ -153,18 +152,10 @@ class LocationController extends AbstractController
 
     private function save(
         Location $location,
-        LocationRepository $locationRepository,
-        FormInterface $form
+        LocationRepository $locationRepository
     ): void {
-        $locationHours = $form->get('hours')->getData();
-
-        foreach ($locationHours as $locationHour) {
-            $locationHour->setLocation($location);
-
-            if ($locationHour->isClosed()) {
-                $locationHour->setOpen(null);
-                $locationHour->setClose(null);
-            }
+        foreach ($location->getHours() as $hours) {
+            $hours->setLocation($location);
         }
 
         if ($location->isPrimary()) {
