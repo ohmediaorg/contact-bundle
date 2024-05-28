@@ -21,8 +21,12 @@ class LocationController extends AbstractController
 {
     private const CSRF_TOKEN_REORDER = 'location_reorder';
 
+    public function __construct(private LocationRepository $locationRepository)
+    {
+    }
+
     #[Route('/locations', name: 'location_index', methods: ['GET'])]
-    public function index(LocationRepository $locationRepository): Response
+    public function index(): Response
     {
         $newLocation = new Location();
 
@@ -32,7 +36,7 @@ class LocationController extends AbstractController
             'You cannot access the list of locations.'
         );
 
-        $locations = $locationRepository->findAllOrdered();
+        $locations = $this->locationRepository->findAllOrdered();
 
         return $this->render('@OHMediaContact/location/location_index.html.twig', [
             'locations' => $locations,
@@ -45,7 +49,6 @@ class LocationController extends AbstractController
     #[Route('/locations/reorder', name: 'location_reorder_post', methods: ['POST'])]
     public function reorderPost(
         Connection $connection,
-        LocationRepository $locationRepository,
         Request $request
     ): Response {
         $this->denyAccessUnlessGranted(
@@ -66,12 +69,12 @@ class LocationController extends AbstractController
 
         try {
             foreach ($locations as $ordinal => $id) {
-                $location = $locationRepository->find($id);
+                $location = $this->locationRepository->find($id);
 
                 if ($location) {
                     $location->setOrdinal($ordinal);
 
-                    $locationRepository->save($location, true);
+                    $this->locationRepository->save($location, true);
                 }
             }
 
@@ -86,10 +89,8 @@ class LocationController extends AbstractController
     }
 
     #[Route('/location/create', name: 'location_create', methods: ['GET', 'POST'])]
-    public function create(
-        Request $request,
-        LocationRepository $locationRepository
-    ): Response {
+    public function create(Request $request): Response
+    {
         $location = new Location();
 
         $this->denyAccessUnlessGranted(
@@ -105,7 +106,7 @@ class LocationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->save($location, $locationRepository);
+            $this->save($location);
 
             $this->addFlash('notice', 'The location was created successfully.');
 
@@ -122,7 +123,6 @@ class LocationController extends AbstractController
     public function edit(
         Request $request,
         Location $location,
-        LocationRepository $locationRepository
     ): Response {
         $this->denyAccessUnlessGranted(
             LocationVoter::EDIT,
@@ -137,7 +137,7 @@ class LocationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->save($location, $locationRepository);
+            $this->save($location);
 
             $this->addFlash('notice', 'The location was updated successfully.');
 
@@ -150,28 +150,25 @@ class LocationController extends AbstractController
         ]);
     }
 
-    private function save(
-        Location $location,
-        LocationRepository $locationRepository
-    ): void {
+    private function save(Location $location): void
+    {
         if ($location->isPrimary()) {
-            $primary = $locationRepository->findPrimary();
+            $primary = $this->locationRepository->findPrimary();
 
             if ($primary && $primary !== $location) {
                 $primary->setPrimary(false);
 
-                $locationRepository->save($primary, true);
+                $this->locationRepository->save($primary, true);
             }
         }
 
-        $locationRepository->save($location, true);
+        $this->locationRepository->save($location, true);
     }
 
     #[Route('/location/{id}/delete', name: 'location_delete', methods: ['GET', 'POST'])]
     public function delete(
         Request $request,
         Location $location,
-        LocationRepository $locationRepository
     ): Response {
         $this->denyAccessUnlessGranted(
             LocationVoter::DELETE,
@@ -186,7 +183,7 @@ class LocationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $locationRepository->remove($location, true);
+            $this->locationRepository->remove($location, true);
 
             $this->addFlash('notice', 'The location was deleted successfully.');
 
