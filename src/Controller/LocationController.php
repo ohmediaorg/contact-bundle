@@ -154,10 +154,6 @@ class LocationController extends AbstractController
         Location $location,
         LocationRepository $locationRepository
     ): void {
-        foreach ($location->getHours() as $hours) {
-            $hours->setLocation($location);
-        }
-
         if ($location->isPrimary()) {
             $primary = $locationRepository->findPrimary();
 
