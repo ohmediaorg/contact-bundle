@@ -105,12 +105,16 @@ class LocationController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->save($location);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->save($location);
 
-            $this->addFlash('notice', 'The location was created successfully.');
+                $this->addFlash('notice', 'The location was created successfully.');
 
-            return $this->redirectToRoute('location_index');
+                return $this->redirectToRoute('location_index');
+            }
+
+            $this->addFlash('error', 'There are some errors in the form below.');
         }
 
         return $this->render('@OHMediaContact/location/location_create.html.twig', [
@@ -136,12 +140,16 @@ class LocationController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->save($location);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->save($location);
 
-            $this->addFlash('notice', 'The location was updated successfully.');
+                $this->addFlash('notice', 'The location was updated successfully.');
 
-            return $this->redirectToRoute('location_index');
+                return $this->redirectToRoute('location_index');
+            }
+
+            $this->addFlash('error', 'There are some errors in the form below.');
         }
 
         return $this->render('@OHMediaContact/location/location_edit.html.twig', [
@@ -182,12 +190,16 @@ class LocationController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->locationRepository->remove($location, true);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->locationRepository->remove($location, true);
 
-            $this->addFlash('notice', 'The location was deleted successfully.');
+                $this->addFlash('notice', 'The location was deleted successfully.');
 
-            return $this->redirectToRoute('location_index');
+                return $this->redirectToRoute('location_index');
+            }
+
+            $this->addFlash('error', 'There are some errors in the form below.');
         }
 
         return $this->render('@OHMediaContact/location/location_delete.html.twig', [

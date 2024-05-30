@@ -47,16 +47,20 @@ class ContactFormController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $formData = $form->getData();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $formData = $form->getData();
 
-            $settings->set('contact_form_recipient', $formData['recipient']);
+                $settings->set('contact_form_recipient', $formData['recipient']);
 
-            $settings->set('contact_form_message', $formData['message']);
+                $settings->set('contact_form_message', $formData['message']);
 
-            $this->addFlash('notice', 'Contact form settings updated successfully');
+                $this->addFlash('notice', 'Contact form settings updated successfully');
 
-            return $this->redirectToRoute('settings_contact_form');
+                return $this->redirectToRoute('settings_contact_form');
+            }
+
+            $this->addFlash('error', 'There are some errors in the form below.');
         }
 
         return $this->render('@OHMediaContact/settings/settings_contact_form.html.twig', [
