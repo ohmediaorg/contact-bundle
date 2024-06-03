@@ -192,11 +192,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const nextDayClose = document.getElementById(row.id + '_next_day_close');
 
     function onClosedChange() {
-      open.style.display = closed.checked ? 'none' : '';
+      open.style.visibility = closed.checked ? 'hidden' : '';
       open.required = !closed.checked;
-      close.style.display = closed.checked ? 'none' : '';
+      close.style.visibility = closed.checked ? 'hidden' : '';
       close.required = !closed.checked;
-      nextDayClose.parentNode.style.display = closed.checked ? 'none' : '';
+      nextDayClose.parentNode.style.visibility = closed.checked ? 'hidden' : '';
     }
 
     closed.addEventListener('change', onClosedChange);
