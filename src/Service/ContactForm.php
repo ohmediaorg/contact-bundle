@@ -69,13 +69,17 @@ class ContactForm
 
         $formBuilder->add('name', TextType::class, [
             'constraints' => [
-                new Assert\NotBlank(null, 'Please fill out your name.'),
+                new Assert\NotBlank([
+                    'message' => 'Please fill out your name.',
+                ]),
             ],
         ]);
 
         $formBuilder->add('email', EmailType::class, [
             'constraints' => [
-                new Assert\NotBlank(null, 'Please fill out your email.'),
+                new Assert\NotBlank([
+                    'message' => 'Please fill out your email.',
+                ]),
                 new Assert\Email(
                     null,
                     'Please enter a valid email address.'
@@ -85,7 +89,9 @@ class ContactForm
 
         $formBuilder->add('phone', TelType::class, [
             'constraints' => [
-                new Assert\NotBlank(null, 'Please fill out your phone number.'),
+                new Assert\NotBlank([
+                    'message' => 'Please fill out your phone number.',
+                ]),
             ],
         ]);
 
@@ -95,18 +101,13 @@ class ContactForm
                 'rows' => 5,
             ],
             'constraints' => [
-                new Assert\NotBlank(null, 'Please enter a message.'),
-                new Assert\Length(
-                    null,
-                    null,
-                    1000,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    'Please enter a message of 1000 characters or less.'
-                ),
+                new Assert\NotBlank([
+                    'message' => 'Please enter a message.',
+                ]),
+                new Assert\Length([
+                    'max' => 1000,
+                    'maxMessage' => 'Please enter a message of 1000 characters or less.',
+                ]),
             ],
         ]);
 
