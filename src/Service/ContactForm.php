@@ -8,6 +8,7 @@ use OHMedia\SettingsBundle\Service\Settings;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -22,7 +23,7 @@ class ContactForm
 
     private array $locations = [];
     private array $subjects = [];
-    private string $defaultRecipient = '';
+    private ?string $defaultRecipient = '';
 
     public function __construct(
         private FormFactoryInterface $formFactory,
@@ -63,9 +64,15 @@ class ContactForm
             return null;
         }
 
-        $formBuilder->add('subject', ChoiceType::class, [
-            'choices' => $this->subjects,
-        ]);
+        if (1 === count($this->subjects)) {
+            $formBuilder->add('subject', HiddenType::class, [
+                'data' => reset($this->subjects),
+            ]);
+        } else {
+            $formBuilder->add('subject', ChoiceType::class, [
+                'choices' => $this->subjects,
+            ]);
+        }
 
         $formBuilder->add('name', TextType::class, [
             'constraints' => [
