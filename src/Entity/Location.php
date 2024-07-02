@@ -221,6 +221,11 @@ class Location
         return $this;
     }
 
+    public function isContactEligible(): bool
+    {
+        return $this->email && $this->contact && $this->subject;
+    }
+
     /**
      * @return Collection<int, LocationHours>
      */

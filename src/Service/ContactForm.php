@@ -42,11 +42,11 @@ class ContactForm
         $locations = $this->locationRepository->findAllOrdered();
 
         foreach ($locations as $location) {
-            if (!$location->getEmail()) {
+            if (!$location->isContactEligible()) {
                 continue;
             }
 
-            $recipients[(string) $location.' Location'] = 'location:'.$location->getId();
+            $recipients[$location->getSubject()] = 'location:'.$location->getId();
         }
 
         if (!$recipients) {
@@ -118,7 +118,7 @@ class ContactForm
         if ('location' === $parts[0] && isset($parts[1])) {
             $location = $this->locationRepository->find($parts[1]);
 
-            return $location ? $location->getEmail() : null;
+            return $location && $location->isContactEligible() ? $location->getEmail() : null;
         }
     }
 
