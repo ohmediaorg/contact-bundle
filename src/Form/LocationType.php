@@ -146,7 +146,7 @@ class LocationType extends AbstractType
             ],
             'expanded' => true,
             'row_attr' => [
-                'class' => 'fieldset-nostyle',
+                'class' => 'fieldset-nostyle mb-3',
             ],
         ]);
 
@@ -165,7 +165,7 @@ class LocationType extends AbstractType
             ],
             'expanded' => true,
             'row_attr' => [
-                'class' => 'fieldset-nostyle',
+                'class' => 'fieldset-nostyle mb-3',
             ],
             'help' => 'Email must also be populated.',
         ]);
