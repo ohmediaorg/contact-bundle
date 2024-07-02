@@ -49,6 +49,12 @@ class Location
     #[ORM\Column(nullable: true, name: 'main')]
     private ?bool $primary = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $contact = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $subject = null;
+
     /**
      * @var Collection<int, LocationHours>
      */
@@ -187,6 +193,30 @@ class Location
     public function setPrimary(?bool $primary): static
     {
         $this->primary = $primary;
+
+        return $this;
+    }
+
+    public function isContact(): ?bool
+    {
+        return $this->contact;
+    }
+
+    public function setContact(?bool $contact): static
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    public function getSubject(): ?string
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(?string $subject): static
+    {
+        $this->subject = $subject;
 
         return $this;
     }

@@ -45,7 +45,9 @@
 
         {{ form_start(form) }}
           {{ form_row(form.name) }}
+
           {{ form_row(form.address) }}
+
           <div class="row">
             <div class="col-6">{{ form_row(form.city) }}</div>
             <div class="col-6">
@@ -61,6 +63,11 @@
             <div class="col-6">{{ form_row(form.phone) }}</div>
             <div class="col-6">{{ form_row(form.email) }}</div>
           </div>
+
+          {{ form_row(form.contact) }}
+
+          {{ form_row(form.subject) }}
+
           {{ form_row(form.primary) }}
 
           {% do form.hours.setRendered %}
@@ -112,6 +119,8 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('form[name={{ form.vars.name }}]');
+
   const province = document.getElementById('{{ form.province.vars.id }}');
   const provinces = document.getElementById('{{ form.provinces.vars.id }}');
   const states = document.getElementById('{{ form.states.vars.id }}');
@@ -147,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
     input.required = false;
   }
 
-  function toggleFields() {
+  function toggleAddressFields() {
     if ('CAN' === country.value) {
       showInput(provinces);
       showInput(postalCode);
@@ -172,9 +181,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  country.addEventListener('change', toggleFields);
+  country.addEventListener('change', toggleAddressFields);
 
-  toggleFields();
+  toggleAddressFields();
+
+  const contactNodeList = form.elements['{{ form.contact.vars.full_name }}'];
+  const subject = document.getElementById('{{ form.subject.vars.id }}');
+
+  function toggleSubject() {
+    if ('1' === contactNodeList.value) {
+      showInput(subject);
+    } else {
+      hideInput(subject);
+    }
+  }
+
+  contactNodeList.forEach((radio) => {
+    radio.addEventListener('change', toggleSubject);
+  });
+
+  toggleSubject();
 
   const hoursPrototype = document.getElementById('hours_prototype');
   const hoursPrototypeName = {{ form.hours.vars.prototype.vars.name|json_encode|raw }};
