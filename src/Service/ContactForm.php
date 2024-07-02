@@ -20,6 +20,10 @@ class ContactForm
 {
     public const DEFAULT_SUCCESS_MESSAGE = 'Thanks for your submission. We will get back to you as soon as we can.';
 
+    private array $locations = [];
+    private array $subjects = [];
+    private string $defaultRecipient = '';
+
     public function __construct(
         private FormFactoryInterface $formFactory,
         private LocationRepository $locationRepository,
@@ -31,41 +35,51 @@ class ContactForm
     {
         $formBuilder = $this->formFactory->createBuilder(FormType::class);
 
-        $recipients = [];
+        $this->subjects = [];
 
-        $recipient = $this->settings->get('contact_form_recipient');
+        $this->defaultRecipient = $this->settings->get('contact_form_recipient');
 
-        if ($recipient) {
-            $recipients['General Inquiry'] = 'general';
+        if ($this->defaultRecipient) {
+            $this->subjects['General Inquiry'] = 'general';
         }
 
         $locations = $this->locationRepository->findAllOrdered();
 
+        $this->locations = [];
+
         foreach ($locations as $location) {
-            if (!$location->getEmail()) {
+            if (!$location->isContactEligible()) {
                 continue;
             }
 
-            $recipients[(string) $location.' Location'] = 'location:'.$location->getId();
+            $id = $location->getId();
+
+            $this->locations[$id] = $location;
+
+            $this->subjects[$location->getSubject()] = 'location:'.$id;
         }
 
-        if (!$recipients) {
+        if (!$this->subjects) {
             return null;
         }
 
-        $formBuilder->add('recipient', ChoiceType::class, [
-            'choices' => $recipients,
+        $formBuilder->add('subject', ChoiceType::class, [
+            'choices' => $this->subjects,
         ]);
 
         $formBuilder->add('name', TextType::class, [
             'constraints' => [
-                new Assert\NotBlank(null, 'Please fill out your name.'),
+                new Assert\NotBlank([
+                    'message' => 'Please fill out your name.',
+                ]),
             ],
         ]);
 
         $formBuilder->add('email', EmailType::class, [
             'constraints' => [
-                new Assert\NotBlank(null, 'Please fill out your email.'),
+                new Assert\NotBlank([
+                    'message' => 'Please fill out your email.',
+                ]),
                 new Assert\Email(
                     null,
                     'Please enter a valid email address.'
@@ -75,7 +89,9 @@ class ContactForm
 
         $formBuilder->add('phone', TelType::class, [
             'constraints' => [
-                new Assert\NotBlank(null, 'Please fill out your phone number.'),
+                new Assert\NotBlank([
+                    'message' => 'Please fill out your phone number.',
+                ]),
             ],
         ]);
 
@@ -85,18 +101,13 @@ class ContactForm
                 'rows' => 5,
             ],
             'constraints' => [
-                new Assert\NotBlank(null, 'Please enter a message.'),
-                new Assert\Length(
-                    null,
-                    null,
-                    1000,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    'Please enter a message of 1000 characters or less.'
-                ),
+                new Assert\NotBlank([
+                    'message' => 'Please enter a message.',
+                ]),
+                new Assert\Length([
+                    'max' => 1000,
+                    'maxMessage' => 'Please enter a message of 1000 characters or less.',
+                ]),
             ],
         ]);
 
@@ -107,19 +118,28 @@ class ContactForm
         return $formBuilder->getForm();
     }
 
-    public function getRecipientEmail(string $recipient): ?string
+    public function getRecipient(string $subject): ?string
     {
-        if ('general' === $recipient) {
-            return $this->settings->get('contact_form_recipient');
+        if ('general' === $subject) {
+            return $this->defaultRecipient;
         }
 
-        $parts = explode(':', $recipient);
+        $parts = explode(':', $subject);
 
         if ('location' === $parts[0] && isset($parts[1])) {
-            $location = $this->locationRepository->find($parts[1]);
-
-            return $location ? $location->getEmail() : null;
+            return isset($this->locations[$parts[1]])
+                ? $this->locations[$parts[1]]->getEmail()
+                : null;
         }
+
+        return null;
+    }
+
+    public function getSubject(string $subject): ?string
+    {
+        $subject = array_search($subject, $this->subjects);
+
+        return $subject ?: null;
     }
 
     public function getSuccessMessage(): string

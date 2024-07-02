@@ -3,12 +3,12 @@
 namespace OHMedia\ContactBundle\Twig;
 
 use OHMedia\ContactBundle\Service\ContactForm;
+use OHMedia\WysiwygBundle\Twig\AbstractWysiwygExtension;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Twig\Environment;
-use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
-class ContactFormExtension extends AbstractExtension
+class ContactFormExtension extends AbstractWysiwygExtension
 {
     public function __construct(
         private ContactForm $contactForm,

@@ -38,7 +38,8 @@
             <th style="width:1rem">&nbsp;</th>
             <th>Name</th>
             <th>Address</th>
-            <th>Contact</th>
+            <th>Contact Info</th>
+            <th>Contact Form</th>
             <th>Last Updated</th>
             <th></th>
           </tr>
@@ -72,6 +73,12 @@
               {% endif %}
               {% if location.phone %}
               <small class="d-block">{{ location.phone }}</small>
+              {% endif %}
+            </td>
+            <td>
+              {{ location.contact ? 'Yes' : 'No' }}
+              {% if location.contact %}
+              <small class="d-block"><b>Subject:</b> {{ location.subject }}</small>
               {% endif %}
             </td>
             <td>{{ location.updatedAt|datetime }}</td>

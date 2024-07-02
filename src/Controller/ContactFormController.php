@@ -111,7 +111,8 @@ class ContactFormController extends AbstractController
 
         $formData = $form->getData();
 
-        $recipient = $contactForm->getRecipientEmail($formData['recipient']);
+        $recipient = $contactForm->getRecipient($formData['subject']);
+        $subject = $contactForm->getSubject($formData['subject']);
 
         if (!$recipient) {
             return new JsonResponse('Unknown recipient.', 500);
@@ -123,7 +124,7 @@ class ContactFormController extends AbstractController
             $replyTo = new EmailAddress($formData['email']);
 
             $email = (new Email())
-                ->setSubject('Contact Form Submission')
+                ->setSubject('Contact Form: '.$subject)
                 ->setTemplate('@OHMediaContact/email/contact_email.html.twig', [
                     'data' => $formData,
                 ])
