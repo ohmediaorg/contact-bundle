@@ -8,7 +8,7 @@ use OHMedia\ContactBundle\Entity\Location;
 use OHMedia\ContactBundle\Form\LocationType;
 use OHMedia\ContactBundle\Repository\LocationRepository;
 use OHMedia\ContactBundle\Security\Voter\LocationVoter;
-use OHMedia\SecurityBundle\Form\DeleteType;
+use OHMedia\UtilityBundle\Form\DeleteType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
