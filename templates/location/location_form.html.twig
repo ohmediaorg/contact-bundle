@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
   toggleSubject();
 
   const hoursPrototype = document.getElementById('hours_prototype');
-  const hoursPrototypeName = {{ form.hours.vars.prototype.vars.name|json_encode|raw }};
+  const hoursPrototypeName = {{ form.hours.vars.prototype.vars.name|js }};
 
   const addHoursButton = document.getElementById('add_hours');
   const hoursContainer = document.getElementById('hours_container');

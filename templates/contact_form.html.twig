@@ -35,9 +35,9 @@ document.addEventListener('DOMContentLoaded', async function() {
   const captchaInput = document.getElementById('{{ form_id }}_captcha_input');
 
   const parameters = {
-    sitekey: {{ captcha_sitekey|json_encode|raw }},
-    theme: {{ form.captcha.vars.theme|json_encode|raw }},
-    size: {{ form.captcha.vars.size|json_encode|raw }},
+    sitekey: {{ captcha_sitekey|js }},
+    theme: {{ form.captcha.vars.theme|js }},
+    size: {{ form.captcha.vars.size|js }},
   };
 
   const captcha = await OHMEDIA_ANTISPAM_CAPTCHA_PROMISE(captchaContainer, parameters);
