@@ -8,6 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OHMedia\ContactBundle\Repository\LocationRepository;
 use OHMedia\UtilityBundle\Entity\BlameableEntityTrait;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
 class Location
@@ -23,21 +24,27 @@ class Location
     private ?int $ordinal = 9999;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
     private ?string $address = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
     private ?string $city = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
     private ?string $province = 'SK';
 
     #[ORM\Column(length: 3)]
+    #[Assert\NotBlank]
     private ?string $country = 'CAN';
 
     #[ORM\Column(length: 10)]
+    #[Assert\NotBlank]
     private ?string $postal_code = null;
 
     #[ORM\Column(length: 50, nullable: true)]
@@ -94,7 +101,7 @@ class Location
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(?string $name): static
     {
         $this->name = $name;
 
@@ -106,7 +113,7 @@ class Location
         return $this->address;
     }
 
-    public function setAddress(string $address): static
+    public function setAddress(?string $address): static
     {
         $this->address = $address;
 
@@ -118,7 +125,7 @@ class Location
         return $this->city;
     }
 
-    public function setCity(string $city): static
+    public function setCity(?string $city): static
     {
         $this->city = $city;
 
@@ -130,7 +137,7 @@ class Location
         return $this->province;
     }
 
-    public function setProvince(string $province): static
+    public function setProvince(?string $province): static
     {
         $this->province = $province;
 
@@ -142,7 +149,7 @@ class Location
         return $this->country;
     }
 
-    public function setCountry(string $country): static
+    public function setCountry(?string $country): static
     {
         $this->country = $country;
 
@@ -154,7 +161,7 @@ class Location
         return $this->postal_code;
     }
 
-    public function setPostalCode(string $postal_code): static
+    public function setPostalCode(?string $postal_code): static
     {
         $this->postal_code = $postal_code;
 
