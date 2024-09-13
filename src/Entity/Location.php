@@ -25,32 +25,40 @@ class Location
 
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank]
+    #[Assert\Length(max: 100)]
     private ?string $name = null;
 
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank]
+    #[Assert\Length(max: 100)]
     private ?string $address = null;
 
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank]
+    #[Assert\Length(max: 100)]
     private ?string $city = null;
 
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank]
+    #[Assert\Length(max: 100)]
     private ?string $province = 'SK';
 
     #[ORM\Column(length: 3)]
     #[Assert\NotBlank]
+    #[Assert\Length(max: 3)]
     private ?string $country = 'CAN';
 
     #[ORM\Column(length: 10)]
     #[Assert\NotBlank]
+    #[Assert\Length(max: 10)]
     private ?string $postal_code = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Length(max: 50)]
     private ?string $phone = null;
 
     #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Length(max: 100)]
     private ?string $email = null;
 
     #[ORM\Column(nullable: true, name: 'main')]
@@ -60,6 +68,7 @@ class Location
     private ?bool $contact = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Length(max: 50)]
     private ?string $subject = null;
 
     /**
