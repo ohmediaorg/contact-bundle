@@ -35,7 +35,6 @@ class LocationType extends AbstractType
                 'class' => 'nice-select2',
             ],
             'choices' => [
-                'Saskatchewan' => 'SK',
                 'Alberta' => 'AB',
                 'British Columbia' => 'BC',
                 'Manitoba' => 'MB',
@@ -47,6 +46,7 @@ class LocationType extends AbstractType
                 'Ontario' => 'ON',
                 'Prince Edward Island' => 'PE',
                 'Quebec' => 'QC',
+                'Saskatchewan' => 'SK',
                 'Yukon' => 'YT',
             ],
         ]);
