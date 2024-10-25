@@ -9,6 +9,7 @@ use OHMedia\ContactBundle\Form\LocationType;
 use OHMedia\ContactBundle\Repository\LocationRepository;
 use OHMedia\ContactBundle\Security\Voter\LocationVoter;
 use OHMedia\UtilityBundle\Form\DeleteType;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -126,7 +127,7 @@ class LocationController extends AbstractController
     #[Route('/location/{id}/edit', name: 'location_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
-        Location $location,
+        #[MapEntity(id: 'id')] Location $location,
     ): Response {
         $this->denyAccessUnlessGranted(
             LocationVoter::EDIT,
@@ -176,7 +177,7 @@ class LocationController extends AbstractController
     #[Route('/location/{id}/delete', name: 'location_delete', methods: ['GET', 'POST'])]
     public function delete(
         Request $request,
-        Location $location,
+        #[MapEntity(id: 'id')] Location $location,
     ): Response {
         $this->denyAccessUnlessGranted(
             LocationVoter::DELETE,
