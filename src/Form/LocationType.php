@@ -134,6 +134,10 @@ class LocationType extends AbstractType
             'required' => false,
         ]);
 
+        $builder->add('fax', TelType::class, [
+            'required' => false,
+        ]);
+
         $builder->add('email', EmailType::class, [
             'required' => false,
         ]);

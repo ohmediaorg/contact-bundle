@@ -78,6 +78,10 @@ class Location
     #[ORM\OrderBy(['day' => 'ASC', 'open' => 'ASC'])]
     private Collection $hours;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    #[Assert\Length(max: 50)]
+    private ?string $fax = null;
+
     public function __construct()
     {
         $this->hours = new ArrayCollection();
@@ -379,5 +383,17 @@ class Location
         }
 
         return $schema;
+    }
+
+    public function getFax(): ?string
+    {
+        return $this->fax;
+    }
+
+    public function setFax(?string $fax): static
+    {
+        $this->fax = $fax;
+
+        return $this;
     }
 }
