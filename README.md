@@ -51,10 +51,11 @@ The Location has the following properties available in the template:
 {{ location.postalCode }}
 {{ location.email }}
 {{ location.phone }}
+{{ location.fax }}
 {{ location.primary }} {# true|false indicating if this location is primary #}
 ```
 
-The only values that can be blank are `email` and `phone`.
+The only values that can be blank are `email`, `phone`, and `fax`.
 
 ### Displaying Hours
 

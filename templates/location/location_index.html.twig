@@ -69,10 +69,13 @@
             </td>
             <td>
               {% if location.email %}
-              <small class="d-block">{{ location.email }}</small>
+              <small class="d-block"><b>e:</b> {{ location.email }}</small>
               {% endif %}
               {% if location.phone %}
-              <small class="d-block">{{ location.phone }}</small>
+              <small class="d-block"><b>p:</b> {{ location.phone }}</small>
+              {% endif %}
+              {% if location.fax %}
+              <small class="d-block"><b>f:</b> {{ location.fax }}</small>
               {% endif %}
             </td>
             <td>

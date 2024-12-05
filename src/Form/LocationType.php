@@ -130,15 +130,15 @@ class LocationType extends AbstractType
             'data' => $location->getPostalCode(),
         ]);
 
+        $builder->add('email', EmailType::class, [
+            'required' => false,
+        ]);
+
         $builder->add('phone', TelType::class, [
             'required' => false,
         ]);
 
         $builder->add('fax', TelType::class, [
-            'required' => false,
-        ]);
-
-        $builder->add('email', EmailType::class, [
             'required' => false,
         ]);
 

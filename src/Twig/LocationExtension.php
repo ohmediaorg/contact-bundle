@@ -92,6 +92,10 @@ class LocationExtension extends AbstractExtension
             $schema['telephone'] = $phone;
         }
 
+        if ($fax = $location->getFax()) {
+            $schema['faxNumber'] = $fax;
+        }
+
         $organizationName = $this->settings->get('schema_organization_name');
 
         if ($organizationName) {
