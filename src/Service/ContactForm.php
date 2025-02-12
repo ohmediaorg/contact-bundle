@@ -21,6 +21,11 @@ class ContactForm
 {
     public const DEFAULT_SUCCESS_MESSAGE = 'Thanks for your submission. We will get back to you as soon as we can.';
 
+    private const NAME_LENGTH = 100;
+    private const EMAIL_LENGTH = 180;
+    private const PHONE_LENGTH = 20;
+    private const MESSAGE_LENGTH = 1000;
+
     private array $locations = [];
     private array $subjects = [];
     private ?string $defaultRecipient = '';
@@ -75,14 +80,24 @@ class ContactForm
         }
 
         $formBuilder->add('name', TextType::class, [
+            'attr' => [
+                'maxlength' => self::NAME_LENGTH,
+            ],
             'constraints' => [
                 new Assert\NotBlank([
                     'message' => 'Please fill out your name.',
+                ]),
+                new Assert\Length([
+                    'max' => self::NAME_LENGTH,
+                    'maxMessage' => 'Your name must be {{ limit }} characters or less.',
                 ]),
             ],
         ]);
 
         $formBuilder->add('email', EmailType::class, [
+            'attr' => [
+                'maxlength' => self::EMAIL_LENGTH,
+            ],
             'constraints' => [
                 new Assert\NotBlank([
                     'message' => 'Please fill out your email.',
@@ -91,20 +106,31 @@ class ContactForm
                     null,
                     'Please enter a valid email address.'
                 ),
+                new Assert\Length([
+                    'max' => self::EMAIL_LENGTH,
+                    'maxMessage' => 'Your email address must be {{ limit }} characters or less.',
+                ]),
             ],
         ]);
 
         $formBuilder->add('phone', TelType::class, [
+            'attr' => [
+                'maxlength' => self::PHONE_LENGTH,
+            ],
             'constraints' => [
                 new Assert\NotBlank([
                     'message' => 'Please fill out your phone number.',
+                ]),
+                new Assert\Length([
+                    'max' => self::PHONE_LENGTH,
+                    'maxMessage' => 'Your phone number must be {{ limit }} characters or less.',
                 ]),
             ],
         ]);
 
         $formBuilder->add('message', TextareaType::class, [
             'attr' => [
-                'maxlength' => 1000,
+                'maxlength' => self::MESSAGE_LENGTH,
                 'rows' => 5,
             ],
             'constraints' => [
@@ -112,8 +138,8 @@ class ContactForm
                     'message' => 'Please enter a message.',
                 ]),
                 new Assert\Length([
-                    'max' => 1000,
-                    'maxMessage' => 'Please enter a message of 1000 characters or less.',
+                    'max' => self::MESSAGE_LENGTH,
+                    'maxMessage' => 'Please enter a message of {{ limit }} characters or less.',
                 ]),
             ],
         ]);

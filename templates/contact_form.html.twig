@@ -62,6 +62,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     fetch('{{ path('contact_form_post') }}', {
       method: 'post',
       body: formData,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+      },
     })
       .then(r => r.json())
       .then((r) => {
