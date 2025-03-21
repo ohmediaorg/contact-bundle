@@ -62,7 +62,7 @@ The only values that can be blank are `email`, `phone`, and `fax`.
 ```twig
 {% for day, hours in location.hoursFormatted %}
 <p><b>{{ day }}:</b> {{ hours }}</p>
-{% endif %}
+{% endfor %}
 ```
 
 ### Displaying Today's Hours
