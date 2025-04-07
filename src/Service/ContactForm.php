@@ -91,6 +91,7 @@ class ContactForm
                     'max' => self::NAME_LENGTH,
                     'maxMessage' => 'Your name must be {{ limit }} characters or less.',
                 ]),
+                new Assert\NoSuspiciousCharacters(),
             ],
         ]);
 
@@ -110,6 +111,7 @@ class ContactForm
                     'max' => self::EMAIL_LENGTH,
                     'maxMessage' => 'Your email address must be {{ limit }} characters or less.',
                 ]),
+                new Assert\NoSuspiciousCharacters(),
             ],
         ]);
 
@@ -125,6 +127,7 @@ class ContactForm
                     'max' => self::PHONE_LENGTH,
                     'maxMessage' => 'Your phone number must be {{ limit }} characters or less.',
                 ]),
+                new Assert\NoSuspiciousCharacters(),
             ],
         ]);
 
@@ -141,6 +144,7 @@ class ContactForm
                     'max' => self::MESSAGE_LENGTH,
                     'maxMessage' => 'Please enter a message of {{ limit }} characters or less.',
                 ]),
+                new Assert\NoSuspiciousCharacters(),
             ],
         ]);
 
