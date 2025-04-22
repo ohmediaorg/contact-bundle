@@ -127,6 +127,7 @@ class ContactFormController extends AbstractController
                 ->setSubject('Contact Form: '.$subject)
                 ->setTemplate('@OHMediaContact/email/contact_email.html.twig', [
                     'data' => $formData,
+                    'subject' => $subject,
                 ])
                 ->setTo($to)
                 ->setReplyTo($replyTo)
