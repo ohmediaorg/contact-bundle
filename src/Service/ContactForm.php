@@ -3,6 +3,7 @@
 namespace OHMedia\ContactBundle\Service;
 
 use OHMedia\AntispamBundle\Form\Type\CaptchaType;
+use OHMedia\AntispamBundle\Validator\Constraints\NoForeignCharacters;
 use OHMedia\ContactBundle\Repository\LocationRepository;
 use OHMedia\SettingsBundle\Service\Settings;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -91,6 +92,8 @@ class ContactForm
                     'max' => self::NAME_LENGTH,
                     'maxMessage' => 'Your name must be {{ limit }} characters or less.',
                 ]),
+                new Assert\NoSuspiciousCharacters(),
+                new NoForeignCharacters(),
             ],
         ]);
 
@@ -110,6 +113,8 @@ class ContactForm
                     'max' => self::EMAIL_LENGTH,
                     'maxMessage' => 'Your email address must be {{ limit }} characters or less.',
                 ]),
+                new Assert\NoSuspiciousCharacters(),
+                new NoForeignCharacters(),
             ],
         ]);
 
@@ -125,6 +130,8 @@ class ContactForm
                     'max' => self::PHONE_LENGTH,
                     'maxMessage' => 'Your phone number must be {{ limit }} characters or less.',
                 ]),
+                new Assert\NoSuspiciousCharacters(),
+                new NoForeignCharacters(),
             ],
         ]);
 
@@ -141,6 +148,8 @@ class ContactForm
                     'max' => self::MESSAGE_LENGTH,
                     'maxMessage' => 'Please enter a message of {{ limit }} characters or less.',
                 ]),
+                new Assert\NoSuspiciousCharacters(),
+                new NoForeignCharacters(),
             ],
         ]);
 
