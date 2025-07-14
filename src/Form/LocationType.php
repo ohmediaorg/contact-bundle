@@ -128,6 +128,9 @@ class LocationType extends AbstractType
             'label' => 'ZIP',
             'mapped' => false,
             'data' => $location->getPostalCode(),
+            'attr' => [
+                'maxlength' => 10,
+            ],
         ]);
 
         $builder->add('email', EmailType::class, [
