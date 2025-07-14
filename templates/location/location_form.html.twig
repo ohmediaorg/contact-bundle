@@ -147,38 +147,67 @@ document.addEventListener('DOMContentLoaded', function() {
     postalCode.value = zip.value;
   });
 
-  function showInput(input) {
-    input.parentNode.style.display = '';
-    input.required = true;
+  function toggleRequired(input, show) {
+    if (show && input.hasAttribute('data-toggle-required')) {
+      // restore
+      input.required = input.dataset.toggleRequired;
+      delete input.dataset.toggleRequired;
+    } else if (!show && input.required) {
+      // preserve
+      input.dataset.toggleRequired = input.required;
+      input.required = false;
+    }
   }
 
-  function hideInput(input) {
-    input.parentNode.style.display = 'none';
-    input.required = false;
+  function toggleValue(input, show) {
+    if (show && input.hasAttribute('data-toggle-value')) {
+      // restore
+      input.value = input.dataset.toggleValue;
+      input.removeAttribute('data-toggle-value');
+    } else if (!show) {
+      // preserve
+      input.dataset.toggleValue = input.value;
+      input.value = null;
+    }
+  }
+
+  function toggleInput(input, show) {
+    input.parentNode.style.display = show ? '' : 'none';
+
+    toggleRequired(input, show);
+
+    // if hiding, we only care to toggle the value
+    // to avoid unfocusable errors due to validation
+    if (show || (!show && !input.checkValidity())) {
+      toggleValue(input, show);
+    }
   }
 
   function toggleAddressFields() {
     if ('CAN' === country.value) {
-      showInput(provinces);
-      showInput(postalCode);
-      hideInput(province);
-      hideInput(states);
-      hideInput(zip);
-      province.value = provinces.value;
+      const provincesValue = provinces.value;
+      toggleInput(provinces, true);
+      toggleInput(postalCode, true);
+      toggleInput(province, false);
+      toggleInput(states, false);
+      toggleInput(zip, false);
+      province.value = provincesValue;
     } else if ('USA' === country.value) {
-      showInput(states);
-      showInput(zip);
-      hideInput(province);
-      hideInput(provinces);
-      hideInput(postalCode);
-      province.value = states.value;
-      postalCode.value = zip.value;
+      const statesValue = states.value;
+      const zipValue = zip.value;
+      toggleInput(states, true);
+      toggleInput(zip, true);
+      toggleInput(province, false);
+      toggleInput(provinces, false);
+      toggleInput(postalCode, false);
+      province.value = statesValue;
+      postalCode.value = zipValue;
     } else {
-      showInput(province);
-      showInput(postalCode);
-      hideInput(provinces);
-      hideInput(states);
-      hideInput(zip);
+      toggleInput(province, true);
+      toggleInput(postalCode, true);
+      toggleInput(provinces, false);
+      toggleInput(states, false);
+      toggleInput(zip, false);
     }
   }
 
@@ -190,11 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const subject = document.getElementById('{{ form.subject.vars.id }}');
 
   function toggleSubject() {
-    if ('1' === contactNodeList.value) {
-      showInput(subject);
-    } else {
-      hideInput(subject);
-    }
+    toggleInput(subject, '1' === contactNodeList.value);
   }
 
   contactNodeList.forEach((radio) => {
