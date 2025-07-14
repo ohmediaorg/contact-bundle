@@ -57,8 +57,8 @@ class Location
     #[Assert\Length(max: 50)]
     private ?string $phone = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
-    #[Assert\Length(max: 100)]
+    #[ORM\Column(length: 180, nullable: true)]
+    #[Assert\Length(max: 180)]
     private ?string $email = null;
 
     #[ORM\Column(nullable: true, name: 'main')]
