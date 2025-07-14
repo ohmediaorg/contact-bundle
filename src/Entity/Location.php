@@ -59,6 +59,7 @@ class Location
 
     #[ORM\Column(length: 180, nullable: true)]
     #[Assert\Length(max: 180)]
+    #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column(nullable: true, name: 'main')]
