@@ -102,7 +102,7 @@ class LocationController extends AbstractController
 
         $form = $this->createForm(LocationType::class, $location);
 
-        $form->add('submit', SubmitType::class);
+        $form->add('save', SubmitType::class);
 
         $form->handleRequest($request);
 
@@ -137,7 +137,7 @@ class LocationController extends AbstractController
 
         $form = $this->createForm(LocationType::class, $location);
 
-        $form->add('submit', SubmitType::class);
+        $form->add('save', SubmitType::class);
 
         $form->handleRequest($request);
 
